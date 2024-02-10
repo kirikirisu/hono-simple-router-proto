@@ -4,7 +4,15 @@ import manifest from "__STATIC_CONTENT_MANIFEST";
 
 const app = new Hono();
 
-app.use("/static/*", serveStatic({ root: "./", manifest }));
+app.get("/static/*", serveStatic({ root: "./", manifest }));
+app.get(
+  "/static/spa/*",
+  serveStatic({
+    root: "./",
+    manifest,
+    rewriteRequestPath: (path) => "/static/spa",
+  })
+);
 
 app.get("/", (c) => {
   return c.text("Hello Hono!");
